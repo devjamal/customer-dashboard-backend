@@ -12,25 +12,7 @@ const schemaOptions: SchemaOptions = {
   },
 };
 
-export const userSchema = new Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      trim: true,
-      lowercase: true,
-      unique: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-    },
-  },
-  { timestamps: {} }
-);
-
-export const CustomerSchema = new Schema({
+const CustomerSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -43,13 +25,21 @@ export const CustomerSchema = new Schema({
     trim: true,
     lowercase: true,
   },
-  mainAdhaar: {
+  mainAadhaar: {
     type: String,
     required: true,
     trim: true,
     lowercase: true,
+    unique: true,
   },
-  familyAdhaar: {
+consumerNo:{
+  type: String,
+  required: true,
+  trim: true,
+  lowercase: true,
+  unique: true,
+},
+  familyAadhaar: {
     type: String,
     required: true,
     trim: true,
@@ -72,25 +62,18 @@ export const CustomerSchema = new Schema({
     required: true,
     trim: true,
     lowercase: true,
+    unique: true,
   },
   remarks: {
     type: String,
     required: true,
     trim: true,
     lowercase: true,
-  },
+  }
+},
+  { timestamps: {} }
+)
 
-
-
-
-  createdBy: {
-    type: String,
-    required: true,
-  },
-
-});
-
-export default {
-  userSchema,
-  CustomerSchema,
+export  {
+  CustomerSchema
 };

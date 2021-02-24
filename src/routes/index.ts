@@ -13,7 +13,7 @@ export default function routeDefinition(server: Server) {
 const CUSTOMER =new CustomerController()
 
 server.post("/customer/add" , CUSTOMER.registerACustomer)
-server.post("/customer/find" , CUSTOMER.searchUser)
+server.post("/customer/find" , CUSTOMER.searchCustomer)
 
 
 }

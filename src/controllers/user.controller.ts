@@ -8,11 +8,19 @@ export class UserController extends BaseController {
   constructor(private userService: UserService = new UserService()) {
     super();
   }
-  private userSchema = Joi.object()
+    private userSchema = Joi.object()
     .keys({
+      name:Joi.string().required(),
       email: Joi.string().required().lowercase().email(),
       password: Joi.string().required(),
       mobile:Joi.string().required()
+    })
+    .required();
+
+    private loginSchema = Joi.object()
+    .keys({
+      email: Joi.string().required().lowercase().email(),
+      password: Joi.string().required(),
     })
     .required();
 
@@ -32,7 +40,7 @@ export class UserController extends BaseController {
 
   userLogin = async (req: Request, res: Response, next: Next) => {
     try {
-      const value = await this.userSchema.validateAsync(req.body, { stripUnknown: true });
+      const value = await this.loginSchema.validateAsync(req.body, { stripUnknown: true });
 
       let result = await this.userService.userLogin(value);
       return res.send(result);

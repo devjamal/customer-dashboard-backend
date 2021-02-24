@@ -14,9 +14,10 @@ export class UserService extends BaseService {
     try {
       const enc = { ...user };
       if (enc.password) enc.password = hashSync(enc.password, genSaltSync(12));
-      let result = await db.users.create(enc);
-      let existuser = await db.users.findOne({ email: user.email }).exec();
+      let result = await db.Users.create(enc);
+      let existuser = await db.Users.findOne({ email: user.email }).exec();
       if (this._.isNil(result)) return this.RESP(false, "You haven't registered", result);
+      //@ts-ignore
       result = result.toObject();
       const token = sign(result, process.env.SECRET, JWT_OPTIONS);
       return this.RESP(true, "registered successfully", { token });
@@ -28,13 +29,14 @@ export class UserService extends BaseService {
 
   userLogin = async (user: IUser) => {
     try {
-      let result = await db.users.findOne({ email: user.email }).exec();
+      let result = await db.Users.findOne({ email: user.email }).exec();
       // if (this._.isNil(result)) return this.RESP(false, "You haven't registered", result);
       if (this._.isNil(result)) throw "You haven't registered";
       // if (user.password !== result.password) return this.RESP(false, "password missmatch! try again", result);
       // if (user.email !== result.email) return this.RESP(false, "You have not registered! ,register with us", result);
       const isMatch = compareSync(user.password, result.password);
       if (!isMatch) throw "wrong password";
+      //@ts-ignore
       result = result.toObject();
       delete result.password;
       delete result.createdAt;
@@ -51,7 +53,7 @@ export class UserService extends BaseService {
 
   findUser = async (email) => {
     try {
-      let result = await db.users.findOne(email);
+      let result = await db.Users.findOne(email);
       if (result.email == null) throw "user not found";
       return this.RESP(true, "user found ", result);
     } catch (error) {

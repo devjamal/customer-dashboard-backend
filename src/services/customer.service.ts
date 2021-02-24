@@ -8,8 +8,10 @@ export class CustomerService extends BaseService {
   }
   registerACustomer = async (customer: ICustomer) => {
     try {
+      let customerdata = await db.Customers.findOne({ mainAadhaar:customer.mainAadhaar }).exec();
+
       const enc = { ...customer };
-      let result = await db.customer.create(enc);
+      let result = await db.Customers.create(enc);
       return this.RESP(true, "registered successfully", {result});
     } catch (error) {
       this.log.error(error);
@@ -18,10 +20,19 @@ export class CustomerService extends BaseService {
   };
 
 
+  updateUser = async (options) => {
+    try {
+        const user = await db.Customers.findOneAndUpdate({}, { new: true });
+        if (this._.isNil(user)) throw Error;
+        return this.RESP(true, "Customer updated", user);
+    } catch (error) {
+        throw error;
+    }
+};
 
   findCustomer = async (data) => {
     try {
-      let result = await db.customer.findOne(data);
+      let result = await db.Customers.findOne(data);
     //   if (result.data == null) throw "Customer not found";
       return this.RESP(true, "user found ", result);
     } catch (error) {

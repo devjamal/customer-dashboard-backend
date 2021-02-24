@@ -8,6 +8,8 @@ interface Document extends BaseDocument {
 export interface IUser extends Document {
   email: string;
   password: string;
+  name:string;
+  mobile:string
 }
 
 
@@ -15,12 +17,12 @@ export interface IUser extends Document {
 export interface ICustomer extends Document {
   name: string;
   mainAadhaar: number;
-  consumerNo: boolean;
-  familyAdhaar: number;
+  consumerNo:number;
+  mobile:number;
+  familyAadhaar: number;
   regNo: number
   mainAgent: string;
   subAgent: string
   remarks: string
-  createdBy: string;
 
 }
