@@ -12,6 +12,16 @@ export default class BaseController {
     this.log = log4js.getLogger(this.constructor.name);
   }
 
+  protected joiOptions = {
+    errors: {
+        wrap: {
+            label: "",
+        },
+    },
+    stripUnknown: true,
+    abortEarly: false,
+};
+
   /**
    * @param  {Request} restify http request
    * @returns User object.

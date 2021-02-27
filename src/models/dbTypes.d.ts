@@ -26,3 +26,12 @@ export interface ICustomer extends Document {
   remarks: string
 
 }
+
+export interface IAgent extends Document {
+  name: string;
+  mobile:number;
+  address:string;
+
+
+}
+

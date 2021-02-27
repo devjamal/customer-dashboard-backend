@@ -1,13 +1,12 @@
 "use strict";
-import log4js = require("log4js");
 import _ = require("lodash");
 
 export default class BaseService {
-  protected log: log4js.Logger;
-  protected _: _.LoDashStatic;
-  constructor() {
-    this._ = _;
-    this.log = log4js.getLogger(this.constructor.name);
-  }
-  protected RESP = (success: boolean, message: string, data: any) => ({ success, message, data });
+    protected _: _.LoDashStatic;
+
+    constructor() {
+        this._ = _;
+    }
+
+    protected RESP = (status: string, message: string, data?:any) => ({status, message, data});
 }

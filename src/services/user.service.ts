@@ -16,13 +16,12 @@ export class UserService extends BaseService {
       if (enc.password) enc.password = hashSync(enc.password, genSaltSync(12));
       let result = await db.Users.create(enc);
       let existuser = await db.Users.findOne({ email: user.email }).exec();
-      if (this._.isNil(result)) return this.RESP(false, "You haven't registered", result);
+      if (this._.isNil(result)) return this.RESP("failed", "You haven't registered", result);
       //@ts-ignore
       result = result.toObject();
       const token = sign(result, process.env.SECRET, JWT_OPTIONS);
-      return this.RESP(true, "registered successfully", { token });
+      return this.RESP("success", "registered successfully", { token });
     } catch (error) {
-      this.log.error(error);
       throw error;
     }
   };
@@ -44,9 +43,8 @@ export class UserService extends BaseService {
 
       const token = sign(result, process.env.SECRET, JWT_OPTIONS);
 
-      return this.RESP(true, "user loggedin successfully", { token });
+      return this.RESP("success", "user loggedin successfully", { token });
     } catch (error) {
-      this.log.error(error);
       throw error;
     }
   };
@@ -55,9 +53,8 @@ export class UserService extends BaseService {
     try {
       let result = await db.Users.findOne(email);
       if (result.email == null) throw "user not found";
-      return this.RESP(true, "user found ", result);
+      return this.RESP("success", "user found ", result);
     } catch (error) {
-      this.log.error(error);
       throw error;
     }
   };

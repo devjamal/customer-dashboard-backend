@@ -2,6 +2,7 @@ import BaseController from "../policies/BaseController";
 import { Request, Response, NextFunction as Next } from "express";
 import * as Joi from "@hapi/joi";
 import { CustomerService } from "../services/customer.service";
+import * as moment from "moment";
 
 
 export class CustomerController extends BaseController {
@@ -39,6 +40,12 @@ export class CustomerController extends BaseController {
     })
     .required();
 
+    private statsDataJoiSchema = Joi.object().keys({
+      start_date: Joi.string().required(),
+      end_date: Joi.string().required(),
+      override_cache: Joi.boolean().default(false)
+  })
+
   registerACustomer = async (req: Request, res: Response, next: Next) => {
     try {
       const value = await this.customerJoiSchema.validateAsync(req.body, { stripUnknown: true });
@@ -57,7 +64,7 @@ export class CustomerController extends BaseController {
   searchCustomer = async (req: Request, res: Response, next: Next) => {
     try {
 
-      const value = await this.cutomerUpdateJoiSchema.validateAsync(req.body, { stripUnknown: true });
+      const value = await this.cutomerUpdateJoiSchema.validateAsync(req.body);
       let result = await this.customerService.findCustomer(value)
       return res.send(result);
     } catch (error) {
@@ -66,6 +73,27 @@ export class CustomerController extends BaseController {
   };
 
 
+  customerStatsData = async (req: Request, res: Response, next: Next) => {
+    try {
+        const validatedData = await this.statsDataJoiSchema.validateAsync(req.body, this.joiOptions);
+        const startDateISO = moment(validatedData.start_date)
+        const endDateISO = moment(validatedData.end_date).endOf('day') // Timezone issue
+        const result = await this.customerService.statsData(startDateISO, endDateISO)
+        return res.status(200).json({ "data": result })
+    } catch (error) {
+      this.ErrorResult(error, req, res, next);
+    }
+}
+
+
+getLiveStats = async (req: Request, res: Response) => {
+  try {
+      const result = await this.customerService.getLiveStats(req.body)
+      return res.status(200).json({ "data": result })
+  } catch (error) {
+      return res.status(400).json()
+  }
+}
 
 
 //update customer
